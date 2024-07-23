@@ -1,9 +1,14 @@
-export const asyncHandler =(reqHandler)=>{
-    (req,res,next)=>{
-        Promise.resolve(reqHandler(req,res,next)).
-        catch((err)=>next(err))
-    }
-}
+const asyncHandler = (reqHandler) => {
+    return (req, res, next) => {
+      // Ensure the request handler is executed and return a promise
+      Promise.resolve(reqHandler(req, res, next))
+        // If there is an error, pass it to the next middleware (error handler)
+        .catch((err) => next(err));
+    };
+  };
+  export default asyncHandler;
+ 
+  
 
 
 

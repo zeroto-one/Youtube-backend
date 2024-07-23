@@ -9,7 +9,7 @@ dotenv.config({
 
  ConnectDB().then(()=>{//connectDB is async it returns a promise so we should do this we resolve promise like this ..
     console.log("Db Connected");
-    app.listen(process.env.PORT||3000,()=>{
+    app.listen(process.env.PORT||3000,()=>{//*step one is connected to db then we start listing at our port .
         console.log(`APP is listing bhai at PORT :${process.env.PORT}`);
     })
  }).catch((err)=>{
