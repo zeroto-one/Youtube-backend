@@ -105,7 +105,7 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.isPasswordCorrect = async function (password) {
  return  await bcrypt.compare(password, this.password);
 };
-/*A function to generate an access token for the user.
+/* A function to generate an access token for the user.
  * The access token is used for authentication and authorization in subsequent requests.
  *
  * @function generateAccessToken
@@ -133,7 +133,7 @@ userSchema.methods.generateAccessToken=function generateAccessToken() {
     );
 }
 
-/** A function to generate a refresh token for the user.
+/* A function to generate a refresh token for the user.
  * The refresh token is used to obtain a new access token when the current one expires.
  *
  * @function generateRefreshToken
