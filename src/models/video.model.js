@@ -1,16 +1,40 @@
 import mongoose from "mongoose";
 
-export const videoModel = new mongoose.Schema(
+ const videoSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    url: { type: String, required: true },
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
-    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    dislikes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    views: Number,
-    createdAt: { type: Date, default: Date.now },
+    videoFile:{
+        type:String,//cloudnary wali id
+        required:true,
+        
+    },
+    thumbnail:{
+        type:String,//cloudnary wali id
+        required:true,
+
+    },
+    title:{
+        type:String,
+        required:true,
+    },
+    description:{
+        type:String,
+        required:true,
+    },duration:{
+        type:Number,//cloudnairy bejega 
+        required:true,
+    },views:{
+        type:Number,
+        default:0,
+    },
+    isPublished:{
+        type:Boolean,
+        default:true,
+    },
+    owner:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+    }
   },
   { timestamps: true }
 );
+export const Video=mongoose.model("Video",videoSchema);
