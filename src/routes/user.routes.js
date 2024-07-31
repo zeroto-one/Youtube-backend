@@ -1,10 +1,12 @@
 import {Router} from "express";
-import { registerUser } from "../controllers/user.controller.js";//always use .js at the end
+import { loginUser, logoutUser, registerUser } from "../controllers/user.controller.js";//always use .js at the end
 import {upload} from "../middlewares/multer.middleware.js"
+import {verifyJWT} from "../middlewares/auth.middleware.js"//this
 //now use this Router
 
 
 export const router =Router();
+
 //now use this Router when /user pe call ani control idr aa jana then /user/register pe post req ani then re registerUser function call ho jana
 router.route("/register").post(
     upload.fields(// * here we wrote middleware to handle our files 
@@ -20,4 +22,6 @@ router.route("/register").post(
     )
     ,registerUser);//explain
 
-//other routes will be added here.
+router.route("/login").post(loginUser);
+//login ke bad wale routes AKA secure Routes
+router.route("/logout").post(verifyJWT,logoutUser)
