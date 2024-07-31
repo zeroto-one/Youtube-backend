@@ -15,10 +15,13 @@ class apiError extends Error{
         if(stack){
             this.stack=stack
         }else{
-            errors.captureStackTrace(this,this.constructor)
+            Error.captureStackTrace(this,this.constructor)//this is causing error fix it 
+            this.stack=errors.stack
         }
     }
 }
+//export this
+export {apiError};
 /**
  * Class: apiError
 
