@@ -126,9 +126,9 @@ userSchema.methods.generateAccessToken=function generateAccessToken() {
             username: this.username,
             fullname: this.fullname,
         },
-        process.env.ACCESS_TOKEN_SECRET,
+        `${process.env.ACCESS_TOKEN_SECRET}`,
         {
-            expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
+            expiresIn: `${process.env.ACCESS_TOKEN_EXPIRY}`,
         }
     );
 }
@@ -146,14 +146,17 @@ userSchema.methods.generateAccessToken=function generateAccessToken() {
  * const refreshToken = user.generateRefreshToken();
  * console.log("Generated Refresh Token:", refreshToken);
  */
+
 userSchema.methods.generateRefreshToken=function generateRefreshToken() {
+  console.log("this is from generateRefresh :",process.env.REFRESH_TOKEN_EXPIRY)
     return jwt.sign(
         {
             _id: this._id,
         },
-        process.env.REFRESH_TOKEN_SECRET,
+        `${process.env.REFRESH_TOKEN_SECRET}`,
         {
-            expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
+          
+            expiresIn:`${process.env.REFRESH_TOKEN_EXPIRY}`,
         }
     );
 }
