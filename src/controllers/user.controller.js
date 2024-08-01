@@ -102,8 +102,6 @@ export const registerUser = asyncHandler(async (req, res) => {
     );
     [];
 });
-//is there ant bug is loginUser
-
 export const loginUser = asyncHandler(async (req, res) => {
     //TODO get data from frontend username/email and password
     //TODO validate user and email kya user ne diya hen ye ?
@@ -236,3 +234,104 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
         throw new ApiError(500, "Server error while refreshing accessToken");
     }
 });
+export const changeCurrentPassword = asyncHandler(async (req, res) => {
+    const { currentPassword, newPassword ,confirmPassword} = req.body;
+    if(!(newPassword===confirmPassword)){
+        throw new ApiError(400, "Passwords do not match ,please try again");
+    }
+    const user = await User.findById(req.user._id); //as this req.user don't have password
+    //first check if current password is correct
+    const isPasswordValid = await user.isPasswordCorrect(currentPassword);
+    if (!isPasswordValid) {
+        throw new ApiError(400, "Invalid old Password");
+    }
+    //now validate new password
+    const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(newPassword.trim()))
+        throw new ApiError(
+            400,
+            "Password should contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+        );
+    //now update password in db
+    user.password = newPassword; //before saving changed password pre-hook will always get applied and it will hash the password
+    await user.save({ validateBeforeSave: false });
+    return res
+        .status(200)
+        .json(new ApiResponse(200, {}, "Password updated successfully"));
+});
+export const getCurrentUser= asyncHandler(async(req,res)=>{
+    //user is already present in req so directly send it 
+    res.status(200).json(
+        new ApiResponse(200,req.user,"User retrieved successfully")
+    )
+});
+export const updateUserDetails=asyncHandler(async(req,res)=>{
+    const {fullname,email}=req.body;
+    if(!fullname||!email){
+        throw new ApiError(400, "Fullname or email one of them is required")
+    }
+    const user= await User.findByIdAndUpdate(req.user?._id,{
+        fullname,
+        email,
+    },{
+            new:true,
+            runValidators:true,
+            useFindAndModify:false
+    }).select("-password")
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,{},"Details updated Successfully")
+    )
+
+})
+export const updateUserAvatar= asyncHandler(async(req,res)=>{
+    const localFilePath= req.file?.path;
+    if(!localFilePath){
+        throw new ApiError(400, "No image uploaded")
+    }
+    const avatar= await uploadOnCloudinary(localFilePath);
+    if(!avatar){
+        throw new ApiError(500, "Error uploading avatar to cloudinary")
+    }
+    const user= await User.findByIdAndUpdate(req.user?._id,{
+       $set:{ avatar:avatar.url}
+    },{
+        new:true,
+        runValidators:true,
+        useFindAndModify:false
+    }).select("-password")
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,{},"Avatar updated Successfully")
+    )
+})
+export const updateUserCoverImage= asyncHandler(async(req,res)=>{
+    const localFilePath=req.file?.coverImage;
+    if(!localFilePath){
+        throw new ApiError(400, "No cover image uploaded")
+    }
+    const coverImage= await uploadOnCloudinary(localFilePath);
+    if(!coverImage){
+        throw new ApiError(500, "Error uploading cover image to cloudinary") 
+    }
+    const user = await User.findByIdAndUpdate(req.user?._id,{
+        $set:{coverImage:coverImage.url}},
+        {
+            new:true,
+            runValidators:true,
+            useFindAndModify:false
+
+        }
+    ).select("-password");
+    
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,user,"Cover Image updated Successfully")
+    )
+    
+})
