@@ -24,10 +24,10 @@ export const verifyJWT = asyncHandler(async (req, res, next) => {
   )
   if(!user){
     //TODO discuss about frontend here later
-    throw new ApiError(401,"Invalid access token ")
+    throw new ApiError(401,"Invalid access token user not found ")
   }
   req.user=user;//by this we are giving access of our user to logout 
-  
+  console.log("left Middleware")
   next();
  }catch(error){
     // if(error instanceof jwt.TokenExpiredError){
