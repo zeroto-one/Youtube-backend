@@ -79,6 +79,7 @@ export const registerUser = asyncHandler(async (req, res) => {
     if (!avatar) {
         throw new ApiError(500, "Error uploading avatar ");
     }
+    console.log(avatar);
     const user = await User.create({
         fullname,
         avatar: avatar.url,
