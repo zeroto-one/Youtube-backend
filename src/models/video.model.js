@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
  const videoSchema = new mongoose.Schema(
   {
-    videoFile:{
+    videoId:{
         type:String,//cloudnary wali id
         required:true,
         
     },
-    thumbnail:{
+    thumbnailId:{
         type:String,//cloudnary wali id
         required:true,
 
@@ -22,7 +22,7 @@ import mongoose from "mongoose";
     },duration:{
         type:Number,//cloudnairy bejega 
         required:true,
-    },views:{
+    },viewCount:{
         type:Number,
         default:0,
     },
