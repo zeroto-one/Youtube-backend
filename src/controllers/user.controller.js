@@ -403,7 +403,7 @@ export const getUserChannelProfile = asyncHandler(async (req, res) => {
                 channelSubscribedToCount: {
                     $size: "$subscribedTo",
                 },
-                isSubscribed: {
+                isSubscribed: {//explain me thi
                     $cond: {
                         if: { $in: [req.user?._id, "$subscribers.subscriber"] },
                         then: true,
@@ -530,13 +530,13 @@ export const getUserChannelProfile = asyncHandler(async (req, res) => {
 export const getWatchHistory = asyncHandler(async (req, res) => {
     const user = await User.aggregate([
         {
-            $match: {
+            $match: {//user collection me se srf current user ka data hen ab tak 
                 _id: new mongoose.Types.ObjectId(req.user?._id),
             },
         },
         {
-            $lookup: {
-                from: "vidoes",
+            $lookup: {// ab yaha jo watch history array hen usme jo jo video hen uske related info aagyi watchHistory naam me new array me 
+                from: "videos",
                 localField: "watchHistory",
                 foreignField: "_id",
                 as: "watchHistory",

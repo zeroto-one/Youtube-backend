@@ -6,7 +6,7 @@ const likeSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "Video",
             required: true,
-            unique: true,
+            //unique: true,
         },
         commentId: {
             type: mongoose.Schema.Types.ObjectId,
@@ -14,7 +14,7 @@ const likeSchema = new mongoose.Schema(
             required: false,
             default: null,
         },
-        linkedBy: {
+        likedBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true,
